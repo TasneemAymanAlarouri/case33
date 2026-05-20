@@ -1,0 +1,75 @@
+import java.util.ArrayList;
+import java.util.List;
+
+interface OrganizationComponent {
+    void showDetails();
+}
+
+class Employee implements OrganizationComponent {
+    private String name;
+    private String position;
+
+    public Employee(String name, String position) {
+        this.name = name;
+        this.position = position;
+    }
+
+    @Override
+    public void showDetails() {
+        System.out.println("Employee: " + name + " | Position: " + position);
+    }
+}
+
+class Department implements OrganizationComponent {
+    private String name;
+    private List<OrganizationComponent> members = new ArrayList<>();
+
+    public Department(String name) {
+        this.name = name;
+    }
+
+    public void add(OrganizationComponent component) {
+        members.add(component);
+    }
+
+    public void remove(OrganizationComponent component) {
+        members.remove(component);
+    }
+
+    @Override
+    public void showDetails() {
+        System.out.println("Department: " + name);
+
+        for (OrganizationComponent component : members) {
+            component.showDetails();
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        Employee emp1 = new Employee("Ahmed", "Developer");
+        Employee emp2 = new Employee("Sara", "Designer");
+        Employee emp3 = new Employee("Ali", "Security Engineer");
+        Employee emp4 = new Employee("Lina", "HR Manager");
+
+        Department securityTeam = new Department("Security Team");
+        securityTeam.add(emp3);
+
+        Department itDepartment = new Department("IT Department");
+        itDepartment.add(emp1);
+        itDepartment.add(emp2);
+        itDepartment.add(securityTeam);
+
+        Department hrDepartment = new Department("HR Department");
+        hrDepartment.add(emp4);
+
+        Department company = new Department("Company");
+
+        company.add(itDepartment);
+        company.add(hrDepartment);
+
+        company.showDetails();
+    }
+}
